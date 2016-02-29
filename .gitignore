@@ -13,6 +13,7 @@ depth/NuitrackExample.sln
 room/Assets/Nuitrack/
 room/Assets/Nuitrack.meta
 room/Temp
+room/Library/
 room/NuitrackExample.sln
 nuitrackHelper.*
 
@@ -28,8 +29,6 @@ ExportedObj/
 *.pidb
 *.booproj
 *.svd
-ShaderCache/
-metadata/
 
 
 # Unity3D generated meta files
