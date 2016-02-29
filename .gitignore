@@ -28,6 +28,8 @@ ExportedObj/
 *.pidb
 *.booproj
 *.svd
+ShaderCache/
+metadata/
 
 
 # Unity3D generated meta files
@@ -39,3 +41,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+*.DS_Store
