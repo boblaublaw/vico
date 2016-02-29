@@ -8,8 +8,10 @@
 # I don't want to check in anything from the SDK because I think i'm under NDA
 depth/Assets/NuitrackDemos/
 depth/Assets/Nuitrack/
+depth/Assets/Nuitrack.meta
 depth/NuitrackExample.sln
 room/Assets/Nuitrack/
+room/Assets/Nuitrack.meta
 room/Temp
 room/NuitrackExample.sln
 nuitrackHelper.*
