@@ -77,6 +77,13 @@ public class UserTrackerExample: MonoBehaviour
 			depthSensor.OnUpdateEvent += DepthUpdate;
 			userTracker.OnUpdateEvent += UserUpdate;
 
+			exceptionsLogger.AddEntry ("hRes: " + hRes);
+			exceptionsLogger.AddEntry ("mode.HFOV: " + mode.HFOV);
+			exceptionsLogger.AddEntry ("mode.XRes: " + mode.XRes);
+			exceptionsLogger.AddEntry ("mode.YRes: " + mode.YRes);
+			exceptionsLogger.AddEntry ("frameStep: " + frameStep);
+			exceptionsLogger.AddEntry ("depthtoScale: " + depthToScale);
+
 			nuitrack.Nuitrack.Run ();
 		}
 		catch (Exception ex)
@@ -113,6 +120,11 @@ public class UserTrackerExample: MonoBehaviour
 		visualizationParts = new GameObject[parts];
 		visualizationMeshes = new Mesh[parts];
 
+		exceptionsLogger.AddEntry ("vertsPerMesh: " + vertsPerMesh);
+		exceptionsLogger.AddEntry ("trisPerMesh: " + trisPerMesh);
+		exceptionsLogger.AddEntry ("meshScaling: " + meshScaling);
+		exceptionsLogger.AddEntry ("pointsPerVis: " + pointsPerVis);
+		exceptionsLogger.AddEntry ("parts: " + parts);
 
 		//generation of triangle indexes, vertices, uvs and normals for all visualization parts
 		for (int i = 0; i < parts; i++)
