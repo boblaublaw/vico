@@ -36,6 +36,6 @@ public class FPSMeter : MonoBehaviour
       total += dt_msec[i];
     }
     fps = (float)(windowLength * 1000 / total);
-    fpsText.text = fps.ToString("0");
+    fpsText.text = "FPS:" + fps.ToString("0");
   }
 }

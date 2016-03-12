@@ -1,28 +1,28 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &156642
+--- !u!1 &184852
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 224: {fileID: 22459562}
-  - 222: {fileID: 22266086}
-  - 114: {fileID: 11489200}
+  - 224: {fileID: 22478134}
+  - 222: {fileID: 22283130}
+  - 114: {fileID: 11436324}
   m_Layer: 5
-  m_Name: FPS Text
+  m_Name: Debug Text
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &11489200
+--- !u!114 &11436324
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 156642}
+  m_GameObject: {fileID: 184852}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
@@ -49,19 +49,19 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Debug here
---- !u!222 &22266086
+  m_Text: debug here
+--- !u!222 &22283130
 CanvasRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 156642}
---- !u!224 &22459562
+  m_GameObject: {fileID: 184852}
+--- !u!224 &22478134
 RectTransform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 156642}
+  m_GameObject: {fileID: 184852}
   m_LocalRotation: {x: 0, y: -0.00000020663208, z: 0, w: -1}
   m_LocalPosition: {x: 0, y: 0, z: -0.10003805}
   m_LocalScale: {x: 0.24837609, y: 0.28, z: 0.24837609}
@@ -70,7 +70,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -430877.12, y: -4361749.5}
+  m_AnchoredPosition: {x: -5.0006075, y: 166}
   m_SizeDelta: {x: -431, y: -278}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &100100000
@@ -82,5 +82,5 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 156642}
+  m_RootGameObject: {fileID: 184852}
   m_IsPrefabParent: 1
