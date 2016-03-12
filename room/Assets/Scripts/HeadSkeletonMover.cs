@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class HeadSkeletonMover : MonoBehaviour 
 {
 	public static string HandTag = "Hands";
@@ -13,6 +14,8 @@ public class HeadSkeletonMover : MonoBehaviour
 	[SerializeField]GameObject connectionPrefab;
 	[SerializeField]float neckHeadDistance = 0.15f;
 	[SerializeField]Transform camTr;
+
+	const int NUM_CONNECTIONS = 8;
 
 	nuitrack.JointType[,] jointConnections;
 	GameObject[] connections;
@@ -39,22 +42,24 @@ public class HeadSkeletonMover : MonoBehaviour
 			nuitrack.JointType.LeftWrist,
 			nuitrack.JointType.RightWrist,
 
+			/*
 			nuitrack.JointType.LeftHip,
 			nuitrack.JointType.RightHip,
 			nuitrack.JointType.LeftKnee,
 			nuitrack.JointType.RightKnee,
 			nuitrack.JointType.LeftAnkle,
 			nuitrack.JointType.RightAnkle
+			*/
 		};
 
-		connections = new GameObject[14];
+		connections = new GameObject[NUM_CONNECTIONS];
 		for (int i = 0; i < connections.Length; i++)
 		{
 			connections[i] = (GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity);
 			connections[i].SetActive(false);
 		}
 
-		jointConnections = new nuitrack.JointType[14, 2];
+		jointConnections = new nuitrack.JointType[NUM_CONNECTIONS, 2];
 		{
 			jointConnections[0, 0] = nuitrack.JointType.LeftWrist;
 			jointConnections[0, 1] = nuitrack.JointType.LeftElbow;
@@ -76,11 +81,11 @@ public class HeadSkeletonMover : MonoBehaviour
 			
 			jointConnections[6, 0] = nuitrack.JointType.LeftShoulder;
 			jointConnections[6, 1] = nuitrack.JointType.RightShoulder;
-			
+			/*
 			jointConnections[7, 0] = nuitrack.JointType.Torso;
 			jointConnections[7, 1] = nuitrack.JointType.LeftHip;
 			
-			jointConnections[8, 0] = nuitrack.JointType.Torso;
+			jointConnections[8, 0] = nuitrack.JointType.Torso; 
 			jointConnections[8, 1] = nuitrack.JointType.RightHip;
 			
 			jointConnections[9, 0] = nuitrack.JointType.LeftHip;
@@ -97,6 +102,7 @@ public class HeadSkeletonMover : MonoBehaviour
 			
 			jointConnections[13, 0] = nuitrack.JointType.RightKnee;
 			jointConnections[13, 1] = nuitrack.JointType.RightAnkle;
+			*/
 		}
 
 		joints = new Dictionary<nuitrack.JointType, GameObject>();
@@ -137,7 +143,7 @@ public class HeadSkeletonMover : MonoBehaviour
 				if (joints[j].activeSelf) joints[j].SetActive(false);
 			}
 
-			for (int i = 0; i < 14; i++)
+			for (int i = 0; i < NUM_CONNECTIONS; i++)
 			{
 				if (connections[i].activeSelf) connections[i].SetActive(false);
 			}
@@ -146,7 +152,7 @@ public class HeadSkeletonMover : MonoBehaviour
 
 	void UpdateJointConnections()
 	{
-		for (int i = 0; i < 14; i++) // connections
+		for (int i = 0; i < NUM_CONNECTIONS; i++) // connections
 		{
 			if (joints[jointConnections[i,0]].activeSelf &&
 			    joints[jointConnections[i,1]].activeSelf)
