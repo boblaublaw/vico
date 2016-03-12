@@ -124,86 +124,13 @@ public class HeadSkeletonMover : MonoBehaviour
 
 	void FixedUpdate ()
 	{
-		JointsUpdate();
-		HeadUpdate();
-	}
-
-	void HeadUpdate()
-	{
 		if (NuitrackManager.CurrentUser != 0)
 		{
-			nuitrack.Joint neckJoint = NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.Neck);
-			Vector3 headPos = 
-				TPoseCalibration.SensorOrientation * new Vector3(neckJoint.Real.X * 0.001f, neckJoint.Real.Y * 0.001f, neckJoint.Real.Z * 0.001f) + 
-				camTr.rotation * new Vector3(0f, neckHeadDistance, 0f);
-			transform.position = joints[nuitrack.JointType.Head].GetComponent<Rigidbody>().position;
-			joints[nuitrack.JointType.Head].GetComponent<Rigidbody>().MoveRotation(camTr.rotation);
+			UpdateJoints();
+			HeadUpdate();
+			UpdateJointConnections();
 		}
-	}
-
-	void JointsUpdate()
-	{
-		if (NuitrackManager.CurrentUser != 0)
-		{
-			foreach(nuitrack.JointType j in joints.Keys)
-			{
-				nuitrack.Joint joint = NuitrackManager.CurrentSkeleton.GetJoint(j);
-				Vector3 vPos = TPoseCalibration.SensorOrientation * new Vector3(joint.Real.X * 0.001f, joint.Real.Y * 0.001f, joint.Real.Z * 0.001f);
-
-				if (j == nuitrack.JointType.Head)
-				{
-					Vector3 collar = 0.001f * SkeletonJointToVector3(NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.LeftCollar));
-					Vector3 torso = 0.001f * SkeletonJointToVector3(NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.Torso));
-					Vector3 direction = (collar - torso).normalized;
-					vPos = TPoseCalibration.SensorOrientation * (collar + TPoseCalibration.CollarHeadDistance * direction);
-				}
-
-				if ( joint.Confidence > 0.5f)
-				{
-					Vector3 nextPos = Vector3.Lerp(joints[j].GetComponent<Rigidbody>().position, vPos, lerpFactor);
-					if ((nextPos - joints[j].GetComponent<Rigidbody>().position).magnitude > maxJointSpeed * Time.deltaTime)
-					{
-						nextPos = Vector3.MoveTowards(joints[j].GetComponent<Rigidbody>().position, vPos, maxJointSpeed * Time.deltaTime);
-					}
-					joints[j].GetComponent<Rigidbody>().MovePosition(nextPos);
-					if (!joints[j].activeSelf) joints[j].SetActive(true);
-				}
-				else
-				{
-					if (j != nuitrack.JointType.Head) 
-					{
-						if (joints[j].activeSelf) joints[j].SetActive(false);
-					}
-				}
-			}
-
-			for (int i = 0; i < 14; i++) // connections
-			{
-				if (joints[jointConnections[i,0]].activeSelf &&
-				    joints[jointConnections[i,1]].activeSelf)
-				{
-					Vector3 delta = joints[jointConnections[i, 1]].transform.position - 
-						joints[jointConnections[i, 0]].transform.position;
-					if (delta.magnitude > 0.01f)
-					{
-						connections[i].transform.position = joints[jointConnections[i, 0]].transform.position;
-						connections[i].transform.rotation = Quaternion.LookRotation(delta);
-						connections[i].transform.localScale = new Vector3(connections[i].transform.localScale.x, connections[i].transform.localScale.y, delta.magnitude);
-
-						if (!connections[i].activeSelf) connections[i].SetActive(true);
-					}
-					else
-					{
-						connections[i].SetActive(false); //joints are too close, no need to render
-					}
-				}
-				else
-				{
-					if (connections[i].activeSelf) connections[i].SetActive(false);
-				}
-			}
-		}
-		else //hide user joints if we have no active user
+			else //hide user joints if we have no active user
 		{
 			foreach(nuitrack.JointType j in joints.Keys)
 			{
@@ -213,6 +140,81 @@ public class HeadSkeletonMover : MonoBehaviour
 			for (int i = 0; i < 14; i++)
 			{
 				if (connections[i].activeSelf) connections[i].SetActive(false);
+			}
+		}
+	}
+
+	void UpdateJointConnections()
+	{
+		for (int i = 0; i < 14; i++) // connections
+		{
+			if (joints[jointConnections[i,0]].activeSelf &&
+			    joints[jointConnections[i,1]].activeSelf)
+			{
+				Vector3 delta = joints[jointConnections[i, 1]].transform.position - 
+					joints[jointConnections[i, 0]].transform.position;
+				if (delta.magnitude > 0.01f)
+				{
+					connections[i].transform.position = joints[jointConnections[i, 0]].transform.position;
+					connections[i].transform.rotation = Quaternion.LookRotation(delta);
+					connections[i].transform.localScale = new Vector3(connections[i].transform.localScale.x, connections[i].transform.localScale.y, delta.magnitude);
+					if (!connections[i].activeSelf) connections[i].SetActive(true);
+				}
+				else
+				{
+					connections[i].SetActive(false); //joints are too close, no need to render
+				}
+			}
+			else
+			{
+				if (connections[i].activeSelf) connections[i].SetActive(false);
+			}
+		}
+	}
+
+	void HeadUpdate()
+	{
+		nuitrack.Joint neckJoint = NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.Neck);
+		Vector3 headPos = 
+			TPoseCalibration.SensorOrientation * new Vector3(neckJoint.Real.X * 0.001f, neckJoint.Real.Y * 0.001f, neckJoint.Real.Z * 0.001f) + 
+			camTr.rotation * new Vector3(0f, neckHeadDistance, 0f);
+		transform.position = joints[nuitrack.JointType.Head].GetComponent<Rigidbody>().position;
+		joints[nuitrack.JointType.Head].GetComponent<Rigidbody>().MoveRotation(camTr.rotation);
+	}
+
+	void UpdateJoints()
+	{
+		foreach(nuitrack.JointType j in joints.Keys)
+		{
+			nuitrack.Joint joint = NuitrackManager.CurrentSkeleton.GetJoint(j);
+			Vector3 vPos = TPoseCalibration.SensorOrientation * new Vector3(joint.Real.X * 0.001f, joint.Real.Y * 0.001f, joint.Real.Z * 0.001f);
+
+			if (j == nuitrack.JointType.Head)
+			{
+				Vector3 collar = 0.001f * SkeletonJointToVector3(NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.LeftCollar));
+				Vector3 torso = 0.001f * SkeletonJointToVector3(NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.Torso));
+				Vector3 direction = (collar - torso).normalized;
+				vPos = TPoseCalibration.SensorOrientation * (collar + TPoseCalibration.CollarHeadDistance * direction);
+			}
+			if ( joint.Confidence > 0.5f)
+			{
+				Vector3 nextPos = Vector3.Lerp(joints[j].GetComponent<Rigidbody>().position, vPos, lerpFactor);
+				if ((nextPos - joints[j].GetComponent<Rigidbody>().position).magnitude > maxJointSpeed * Time.deltaTime)
+				{
+					nextPos = Vector3.MoveTowards(joints[j].GetComponent<Rigidbody>().position, vPos, maxJointSpeed * Time.deltaTime);
+				}
+				joints[j].GetComponent<Rigidbody>().MovePosition(nextPos);
+				if (!joints[j].activeSelf) 
+				{
+					joints[j].SetActive(true);
+				}
+			}
+			else
+			{
+				if (j != nuitrack.JointType.Head) 
+				{
+					if (joints[j].activeSelf) joints[j].SetActive(false);
+				}
 			}
 		}
 	}
