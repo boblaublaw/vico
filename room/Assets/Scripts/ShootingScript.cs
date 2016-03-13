@@ -11,7 +11,9 @@ public class ShootingScript : MonoBehaviour
 	RaycastHit rayHit;					//What line did we shoot down
 	static ExceptionsLogger exceptionsLogger;
 	public GameObject arrow;
-	int speed = 20;
+	int speed = 35;
+	nuitrack.Joint bowJoint;
+	[SerializeField]Transform camTr;
 
 	//OVRPlayerController oVPC;	
 
@@ -24,6 +26,7 @@ public class ShootingScript : MonoBehaviour
 		//oVPC=GetComponent<OVRPlayerController>();
 		OVRTouchpad.Create();
 		OVRTouchpad.TouchHandler += HandleTouchHandler;
+		bowJoint = NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.LeftWrist);
 	}
 
 	void HandleTouchHandler (object sender, System.EventArgs e)
@@ -56,8 +59,30 @@ public class ShootingScript : MonoBehaviour
     	//...play our audio...
 		gunFireAudio.Stop();
 		gunFireAudio.Play();
-
+		
+		GameObject arrowObj = Instantiate (arrow) as GameObject;
+		
 		try {
+			Vector3 bowPosition = new Vector3 (bowJoint.Real.X, bowJoint.Real.Y, bowJoint.Real.Z);
+			Vector3 aimingVec = bowPosition - camTr.transform.position;
+
+			exceptionsLogger.AddEntry("aimingVec " + aimingVec);
+			arrowObj.transform.position = camTr.position;
+        	arrowObj.transform.rotation = Quaternion.Euler(aimingVec.x, aimingVec.y, aimingVec.z);
+
+			Rigidbody rb = arrowObj.GetComponent <Rigidbody>();
+
+        	//rb.velocity = camTr.transform.forward * speed;
+        	rb.velocity = aimingVec * speed;
+        	
+        }
+        catch
+        {
+        	exceptionsLogger.AddEntry("shooting problems");
+        }
+    }
+
+	/*
 		//...and create a ray
 		if (Physics.Raycast(transform.position, transform.forward, out rayHit, 100f))
 		{
@@ -73,29 +98,6 @@ public class ShootingScript : MonoBehaviour
 				Destroy(rayHit.transform.gameObject);
 			}
 		} 
-		}
-		catch 
-		{
-			exceptionsLogger.AddEntry("raycast fail: ");
-		}
-		
-		try {
-			/*
-			var instantiatedArrow:Rigibody = Instantiate(arrow, transform.position, transform.rotation);
-			instantiatedArrow.velocity = transform.TransformDirection(Vector3 (0,0,speed));
-			Physics.IgnoreCollision(instantiatedArrow.collider, transform.root.collider);
+		*/
 
-			*/
-			GameObject arrowObj = Instantiate (arrow) as GameObject; //, transform.position, transform.rotation) as GameObject;
-        	arrowObj.transform.position = transform.position + Camera.main.transform.forward * 2;
-        	Rigidbody rb = arrowObj.GetComponent <Rigidbody>();
-        	rb.velocity = Camera.main.transform.forward * speed;
-			//arrowObj.GetComponent<Rigidbody>().velocity = new Vector3 (0,0,speed);
-			
-    	}
-    	catch 
-    	{
-    		exceptionsLogger.AddEntry("instantiate fail: ");
-    	}
-    }
 }

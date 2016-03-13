@@ -63,6 +63,16 @@ public class HeadSkeletonMover : MonoBehaviour
 		{
 			connections[i] = (GameObject)Instantiate(connectionPrefab, Vector3.zero, Quaternion.identity);
 			connections[i].SetActive(false);
+			/*
+			try 
+			{
+				connections[i].GetChild.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 1f);
+			}
+			catch
+			{
+				exceptionsLogger.AddEntry("colorfail on " + i); 
+			}
+			*/
 		}
 
 		jointConnections = new nuitrack.JointType[NUM_CONNECTIONS, 2];
@@ -135,7 +145,7 @@ public class HeadSkeletonMover : MonoBehaviour
 				joints.Add(j, tmp);
 				if ((j == nuitrack.JointType.LeftWrist) || (j == nuitrack.JointType.RightWrist))
 				{
-					joints[j].GetComponent<MeshRenderer>().material.color = new Color(0.75f, 0f, 0f, 1f);
+					//joints[j].GetComponent<MeshRenderer>().material.color = new Color(0.75f, 0f, 0f, 1f);
 					joints[j].tag = HandTag;
 				}
 			}
@@ -172,32 +182,45 @@ public class HeadSkeletonMover : MonoBehaviour
 			if (joints[jointConnections[i,0]].activeSelf &&
 			    joints[jointConnections[i,1]].activeSelf)
 			{
-				Vector3 delta = joints[jointConnections[i, 1]].transform.position - 
-					joints[jointConnections[i, 0]].transform.position;
-				if (delta.magnitude > 0.01f)
+				try 
 				{
-					connections[i].transform.position = joints[jointConnections[i, 0]].transform.position;
-					connections[i].transform.rotation = Quaternion.LookRotation(delta);
-					connections[i].transform.localScale = new Vector3(connections[i].transform.localScale.x, connections[i].transform.localScale.y, delta.magnitude);
-					if (!connections[i].activeSelf) connections[i].SetActive(true);
+					Vector3 delta = joints[jointConnections[i, 1]].transform.position - 
+						joints[jointConnections[i, 0]].transform.position;
+					if (delta.magnitude > 0.01f)
+					{
+						connections[i].transform.position = joints[jointConnections[i, 0]].transform.position;
+						connections[i].transform.rotation = Quaternion.LookRotation(delta);
+						connections[i].transform.localScale = new Vector3(connections[i].transform.localScale.x, connections[i].transform.localScale.y, delta.magnitude);
+						if (!connections[i].activeSelf) 
+						{
+							connections[i].SetActive(true);
+						}
+						else
+						{
+							//joints are too close, no need to render
+							connections[i].SetActive(false); 
+						}
+					}
+					else
+					{
+						if (connections[i].activeSelf) 
+						{
+							connections[i].SetActive(false);
+						}
+					}
 				}
-				else
-				{
-					//joints are too close, no need to render
-					connections[i].SetActive(false); 
+				catch
+				{	
+					exceptionsLogger.AddEntry("failed on joint connections" + joints[jointConnections[i,0]] + "," + joints[jointConnections[i,1]]);
 				}
-			}
-			else
-			{
-				if (connections[i].activeSelf) connections[i].SetActive(false);
 			}
 		}
 	}
 
 	void HeadUpdate()
 	{
-		nuitrack.Joint neckJoint = NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.Neck);
 		/*
+		nuitrack.Joint neckJoint = NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.Neck);
 		Vector3 headPos = 
 			TPoseCalibration.SensorOrientation * new Vector3(neckJoint.Real.X * 0.001f, neckJoint.Real.Y * 0.001f, neckJoint.Real.Z * 0.001f) + 
 			camTr.rotation * new Vector3(0f, neckHeadDistance, 0f);
@@ -208,8 +231,8 @@ public class HeadSkeletonMover : MonoBehaviour
 
 	void BowUpdate()
 	{
-		nuitrack.Joint bowJoint = NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.LeftWrist);
-		/*Vector3 bowPos = 
+		/*nuitrack.Joint bowJoint = NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.LeftWrist);
+		Vector3 bowPos = 
 			TPoseCalibration.SensorOrientation * new Vector3(neckJoint.Real.X * 0.001f, neckJoint.Real.Y * 0.001f, neckJoint.Real.Z * 0.001f) + 
 			camTr.rotation * new Vector3(0f, neckHeadDistance, 0f);
 		
@@ -225,20 +248,39 @@ public class HeadSkeletonMover : MonoBehaviour
 			nuitrack.Joint joint = NuitrackManager.CurrentSkeleton.GetJoint(j);
 			Vector3 vPos = TPoseCalibration.SensorOrientation * new Vector3(joint.Real.X * 0.001f, joint.Real.Y * 0.001f, joint.Real.Z * 0.001f);
 
-			try 
+
+			if (j == nuitrack.JointType.Head)
 			{
-				if (j == nuitrack.JointType.Head)
+				try
 				{
 					Vector3 collar = 0.001f * SkeletonJointToVector3(NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.LeftCollar));
 					Vector3 torso = 0.001f * SkeletonJointToVector3(NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.Torso));
 					Vector3 direction = (collar - torso).normalized;
 					vPos = TPoseCalibration.SensorOrientation * (collar + TPoseCalibration.CollarHeadDistance * direction);
 				}
+				catch
+				{
+					exceptionsLogger.AddEntry("failed on vpos" + j);
+				}
 			}
-			catch
+			/*
+			else if (j == nuitrack.JointType.Head)
 			{
-				exceptionsLogger.AddEntry("failed on vPos " + j);
+				// do not color the left wrist
 			}
+			else
+			{
+				try 
+				{
+					joints[j].GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 1f);
+				}
+				catch
+				{
+					exceptionsLogger.AddEntry("failed on color" + j);
+				}
+			}
+			*/
+		
 			if ( joint.Confidence > 0.5f)
 			{
 				Vector3 nextPos;
