@@ -20,18 +20,24 @@ public class TowerHealth : MonoBehaviour
 		//Set current lives and get audio component reference
         currentLives = numberOfLives;
 		damageAudio = GetComponent<AudioSource>();
+		/*
         if (damageImage)
         {
             Color col = damageImage.color;
             col.a = 0f;
             damageImage.color = col;
 		}
+		*/
 		exceptionsLogger = GameObject.FindObjectOfType<ExceptionsLogger>();
+		exceptionsLogger.AddEntry("collider init!");
     }
 
 	void OnTriggerEnter(Collider other)
 	{
 		exceptionsLogger.AddEntry("collider hit!");
+		damageAudio.Play();
+
+		/*
 		try
 		{
 			scoreText.text = currentLives.ToString("0");
@@ -66,6 +72,7 @@ public class TowerHealth : MonoBehaviour
 			//Restart the gameplay after 3 seconds
 			Invoke("Restart", 3f);
 		}
+		*/
 	}
 
 	void Restart()

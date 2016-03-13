@@ -145,19 +145,30 @@ public class NuitrackManager : MonoBehaviour
 
   void Update ()
   {
+    try {
     nuitrack.Nuitrack.Update ();
+    }
+    catch {
+      //
+    }
   }
 
   public void CloseUserGen ()
   {
-    skeletonTracker.OnSkeletonUpdateEvent -= HandleOnSkeletonUpdateEvent;
-    handTracker.OnUpdateEvent -= HandleOnHandsUpdateEvent;
-    gestureRecognizer.OnNewGesturesEvent -= OnNewGestures;
-    nuitrack.Nuitrack.Release ();
+    try
+    {
+      skeletonTracker.OnSkeletonUpdateEvent -= HandleOnSkeletonUpdateEvent;
+      nuitrack.Nuitrack.Release ();
+    }
+    catch
+    {
+      exceptionsLogger.AddEntry("nuitrack is lame");
+    }
   }
 
   void OnDestroy ()
   {
+
     CloseUserGen ();
   }
 }
