@@ -235,32 +235,19 @@ public class HeadSkeletonMover : MonoBehaviour
 				}
 				catch
 				{
-					exceptionsLogger.AddEntry("failed on Lerp " + j);
+					exceptionsLogger.AddEntry("Your Joint needs a Rigidbody: " + j);
 				}
-				 nextPos = Vector3.Lerp(joints[j].GetComponent<Rigidbody>().position, vPos, lerpFactor);
+				nextPos = Vector3.Lerp(joints[j].GetComponent<Rigidbody>().position, vPos, lerpFactor);
 
-				try
+				if ((nextPos - joints[j].GetComponent<Rigidbody>().position).magnitude > maxJointSpeed * Time.deltaTime)
 				{
-					if ((nextPos - joints[j].GetComponent<Rigidbody>().position).magnitude > maxJointSpeed * Time.deltaTime)
-					{
-						nextPos = Vector3.MoveTowards(joints[j].GetComponent<Rigidbody>().position, vPos, maxJointSpeed * Time.deltaTime);
-					}
+					nextPos = Vector3.MoveTowards(joints[j].GetComponent<Rigidbody>().position, vPos, maxJointSpeed * Time.deltaTime);
 				}
-				catch
+
+				joints[j].GetComponent<Rigidbody>().MovePosition(nextPos);
+				if (!joints[j].activeSelf) 	
 				{
-					exceptionsLogger.AddEntry("failed on rigidbody " + j);
-				}
-				try
-				{
-					joints[j].GetComponent<Rigidbody>().MovePosition(nextPos);
-					if (!joints[j].activeSelf) 	
-					{
-						joints[j].SetActive(true);
-					}
-				}
-				catch
-				{
-					exceptionsLogger.AddEntry("failed on setactive " + j);
+					joints[j].SetActive(true);
 				}
 			}	
 			else
