@@ -67,43 +67,14 @@ public class ShootingScript : MonoBehaviour
 
 			Vector3 bowPos = new Vector3 (bowJoint.Real.X, bowJoint.Real.Y, bowJoint.Real.Z); //bowJoint.GetComponent<Rigidbody>().position;
 			Vector3 headPos = new Vector3 (headJoint.Real.X, headJoint.Real.Y, headJoint.Real.Z); //headJoint.GetComponent<Rigidbody>().position;
-
-			//Vector3 bowPosition = new Vector3 (bowJoint.Real.X, bowJoint.Real.Y, bowJoint.Real.Z);
-			//exceptionsLogger.AddEntry("bowPosition " + bowPosition);
-			//exceptionsLogger.AddEntry("camera " + camTr.transform.position);
-			//Vector3 aimingVec = bowPosition - camTr.transform.position;
 			Vector3 aimingVec = bowPos - headPos;
-			//exceptionsLogger.AddEntry("aimingVec " + aimingVec);
 			arrowObj.transform.position = camTr.position;
-        	//arrowObj.transform.rotation = Quaternion.Euler(aimingVec.x, aimingVec.y, aimingVec.z);
-
 			Rigidbody rb = arrowObj.GetComponent <Rigidbody>();
-        	//rb.velocity = camTr.transform.forward * speed;
         	rb.velocity = aimingVec.normalized * speed;
-        	
         }
         catch
         {
         	exceptionsLogger.AddEntry("shooting problems");
         }
     }
-
-	/*
-		//...and create a ray
-		if (Physics.Raycast(transform.position, transform.forward, out rayHit, 100f))
-		{
-			//If the ray hits something (didn't shoot the sky), move the impact effect to that
-			//location and play it
-			impactEffect.transform.position = rayHit.point;
-			impactEffect.transform.rotation = Quaternion.Euler(270, 0, 0);
-			impactEffect.Stop();
-			impactEffect.Play();
-			//If we hit an enemy Destroy it
-			if (rayHit.transform.tag == "Enemy")
-			{
-				Destroy(rayHit.transform.gameObject);
-			}
-		} 
-		*/
-
 }
