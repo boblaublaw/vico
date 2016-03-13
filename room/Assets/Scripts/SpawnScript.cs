@@ -24,8 +24,8 @@ public class SpawnScript : MonoBehaviour
 		//Our minimum spawn time is 1 second
 		if (spawnInterval > 1f)
 		{
-			//every 50 seconds of gameplay reduces the timer by 1 second
-			float timeReduction = Time.deltaTime / 50;
+			//every N seconds of gameplay reduces the timer by 1 second
+			float timeReduction = Time.deltaTime / 10;
 
 			//Ensure we don't go below 1 second and recalculate variance
 			spawnInterval = Mathf.Max(1f, spawnInterval - timeReduction);
