@@ -24,9 +24,12 @@ public class HeadSkeletonMover : MonoBehaviour
 
 	int NUM_CONNECTIONS = 100;
 
+	static ExceptionsLogger exceptionsLogger;
+
 	void Awake()
 	{
 		NuitrackManager nuitrackInstance = NuitrackManager.Instance;
+		exceptionsLogger = GameObject.FindObjectOfType<ExceptionsLogger>();
 	}
 
 	void Start ()
@@ -117,6 +120,14 @@ public class HeadSkeletonMover : MonoBehaviour
 				tmp.SetActive(false);
 				joints.Add(j, tmp);
 			}
+			else if (j == nuitrack.JointType.LeftWrist)
+			{
+				GameObject tmp = (GameObject)Instantiate(leftHandPrefab, Vector3.zero, Quaternion.identity);
+				tmp.SetActive(false);
+				joints.Add(j, tmp);
+				//joints[j].GetComponent<MeshRenderer>().material.color = new Color(0.25f, 0f, 0f, 1f);
+				joints[j].tag = HandTag;
+			}
 			else
 			{
 				GameObject tmp = (GameObject)Instantiate(jointPrefab, Vector3.zero, Quaternion.identity);
@@ -155,6 +166,8 @@ public class HeadSkeletonMover : MonoBehaviour
 
 	void UpdateJointConnections()
 	{
+		/*
+		exceptionsLogger.AddEntry("test alert");
 		for (int i = 0; i < NUM_CONNECTIONS; i++) // connections
 		{
 			if (joints[jointConnections[i,0]].activeSelf &&
@@ -179,6 +192,7 @@ public class HeadSkeletonMover : MonoBehaviour
 				if (connections[i].activeSelf) connections[i].SetActive(false);
 			}
 		}
+		*/
 	}
 
 	void HeadUpdate()
@@ -198,26 +212,57 @@ public class HeadSkeletonMover : MonoBehaviour
 			nuitrack.Joint joint = NuitrackManager.CurrentSkeleton.GetJoint(j);
 			Vector3 vPos = TPoseCalibration.SensorOrientation * new Vector3(joint.Real.X * 0.001f, joint.Real.Y * 0.001f, joint.Real.Z * 0.001f);
 
-			if (j == nuitrack.JointType.Head)
+			try 
 			{
-				Vector3 collar = 0.001f * SkeletonJointToVector3(NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.LeftCollar));
-				Vector3 torso = 0.001f * SkeletonJointToVector3(NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.Torso));
-				Vector3 direction = (collar - torso).normalized;
-				vPos = TPoseCalibration.SensorOrientation * (collar + TPoseCalibration.CollarHeadDistance * direction);
+				if (j == nuitrack.JointType.Head)
+				{
+					Vector3 collar = 0.001f * SkeletonJointToVector3(NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.LeftCollar));
+					Vector3 torso = 0.001f * SkeletonJointToVector3(NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.Torso));
+					Vector3 direction = (collar - torso).normalized;
+					vPos = TPoseCalibration.SensorOrientation * (collar + TPoseCalibration.CollarHeadDistance * direction);
+				}
+			}
+			catch
+			{
+				exceptionsLogger.AddEntry("failed on vPos " + j);
 			}
 			if ( joint.Confidence > 0.5f)
 			{
-				Vector3 nextPos = Vector3.Lerp(joints[j].GetComponent<Rigidbody>().position, vPos, lerpFactor);
-				if ((nextPos - joints[j].GetComponent<Rigidbody>().position).magnitude > maxJointSpeed * Time.deltaTime)
+				Vector3 nextPos;
+				try 
 				{
-					nextPos = Vector3.MoveTowards(joints[j].GetComponent<Rigidbody>().position, vPos, maxJointSpeed * Time.deltaTime);
+					 nextPos = Vector3.Lerp(joints[j].GetComponent<Rigidbody>().position, vPos, lerpFactor);
 				}
-				joints[j].GetComponent<Rigidbody>().MovePosition(nextPos);
-				if (!joints[j].activeSelf) 
+				catch
 				{
-					joints[j].SetActive(true);
+					exceptionsLogger.AddEntry("failed on Lerp " + j);
 				}
-			}
+				 nextPos = Vector3.Lerp(joints[j].GetComponent<Rigidbody>().position, vPos, lerpFactor);
+
+				try
+				{
+					if ((nextPos - joints[j].GetComponent<Rigidbody>().position).magnitude > maxJointSpeed * Time.deltaTime)
+					{
+						nextPos = Vector3.MoveTowards(joints[j].GetComponent<Rigidbody>().position, vPos, maxJointSpeed * Time.deltaTime);
+					}
+				}
+				catch
+				{
+					exceptionsLogger.AddEntry("failed on rigidbody " + j);
+				}
+				try
+				{
+					joints[j].GetComponent<Rigidbody>().MovePosition(nextPos);
+					if (!joints[j].activeSelf) 	
+					{
+						joints[j].SetActive(true);
+					}
+				}
+				catch
+				{
+					exceptionsLogger.AddEntry("failed on setactive " + j);
+				}
+			}	
 			else
 			{
 				if (j != nuitrack.JointType.Head) 
@@ -225,6 +270,7 @@ public class HeadSkeletonMover : MonoBehaviour
 					if (joints[j].activeSelf) joints[j].SetActive(false);
 				}
 			}
+
 		}
 	}
 

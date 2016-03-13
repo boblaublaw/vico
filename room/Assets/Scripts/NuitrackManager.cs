@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using System;
 using UnityEngine;
 
 public class NuitrackManager : MonoBehaviour
@@ -21,6 +22,8 @@ public class NuitrackManager : MonoBehaviour
   public static nuitrack.UserHands СurrentHands { get { return currentHands; } }
 
   static NuitrackManager instance;
+
+  static ExceptionsLogger exceptionsLogger;
 
   public static NuitrackManager Instance
   {
@@ -48,7 +51,12 @@ public class NuitrackManager : MonoBehaviour
   void Awake ()
   {
     DontDestroyOnLoad (gameObject);
-    NuitrackLoader.InitNuitrackLibraries ();
+    exceptionsLogger = GameObject.FindObjectOfType<ExceptionsLogger>();
+    NuitrackInitState state = NuitrackLoader.InitNuitrackLibraries();
+    if (state != NuitrackInitState.INIT_OK)
+    {  
+      exceptionsLogger.AddEntry("Nuitrack native libraries iniialization error: " + Enum.GetName(typeof(NuitrackInitState), state));
+    }
   }
 
   void NuitrackInit ()
