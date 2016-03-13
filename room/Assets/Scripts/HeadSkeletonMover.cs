@@ -15,13 +15,13 @@ public class HeadSkeletonMover : MonoBehaviour
 	[SerializeField]float neckHeadDistance = 0.15f;
 	[SerializeField]Transform camTr;
 
-	const int NUM_CONNECTIONS = 8;
-
 	nuitrack.JointType[,] jointConnections;
 	GameObject[] connections;
 
 	nuitrack.JointType[] availableJoints;
 	Dictionary<nuitrack.JointType, GameObject> joints;
+
+	int NUM_CONNECTIONS = 100;
 
 	void Awake()
 	{
@@ -51,6 +51,8 @@ public class HeadSkeletonMover : MonoBehaviour
 			nuitrack.JointType.RightAnkle
 			*/
 		};
+
+		NUM_CONNECTIONS = availableJoints.Length;
 
 		connections = new GameObject[NUM_CONNECTIONS];
 		for (int i = 0; i < connections.Length; i++)
