@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class TowerHealth : MonoBehaviour
 {
-	public int numberOfLives = 5;			//How many hits tower can take
+	public int numberOfLives;			//How many hits tower can take
 	public Image damageImage;				//Full screen red image
 
     public int currentLives;				//Current number of lives
@@ -29,15 +29,13 @@ public class TowerHealth : MonoBehaviour
 		}
 		*/
 		exceptionsLogger = GameObject.FindObjectOfType<ExceptionsLogger>();
-		exceptionsLogger.AddEntry("collider init!");
     }
 
 	void OnTriggerEnter(Collider other)
 	{
-		exceptionsLogger.AddEntry("collider hit!");
+		//exceptionsLogger.AddEntry("collider hit!");
 		damageAudio.Play();
 
-		/*
 		try
 		{
 			scoreText.text = currentLives.ToString("0");
@@ -59,6 +57,7 @@ public class TowerHealth : MonoBehaviour
 		//If we are out of lives...
 		if(currentLives <= 0)
 		{
+			Application.Quit();
 			//...set alive to false and show the red damage image
 			//This image will hide the gameplay for 3 seconds
 			alive = false;
@@ -72,7 +71,6 @@ public class TowerHealth : MonoBehaviour
 			//Restart the gameplay after 3 seconds
 			Invoke("Restart", 3f);
 		}
-		*/
 	}
 
 	void Restart()
