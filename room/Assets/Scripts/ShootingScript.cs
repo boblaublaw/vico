@@ -26,7 +26,6 @@ public class ShootingScript : MonoBehaviour
 		//oVPC=GetComponent<OVRPlayerController>();
 		OVRTouchpad.Create();
 		OVRTouchpad.TouchHandler += HandleTouchHandler;
-		bowJoint = NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.LeftWrist);
 	}
 
 	void HandleTouchHandler (object sender, System.EventArgs e)
@@ -63,17 +62,25 @@ public class ShootingScript : MonoBehaviour
 		GameObject arrowObj = Instantiate (arrow) as GameObject;
 		
 		try {
-			Vector3 bowPosition = new Vector3 (bowJoint.Real.X, bowJoint.Real.Y, bowJoint.Real.Z);
-			Vector3 aimingVec = bowPosition - camTr.transform.position;
+			bowJoint = NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.LeftWrist);
+			headJoint = NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.Head);
 
-			exceptionsLogger.AddEntry("aimingVec " + aimingVec);
+			bowPos = bowJoint.GetComponent<Rigidbody>().position;
+			headPos = headJoint.GetComponent<Rigidbody>().position;
+
+			//Vector3 bowPosition = new Vector3 (bowJoint.Real.X, bowJoint.Real.Y, bowJoint.Real.Z);
+			//exceptionsLogger.AddEntry("bowPosition " + bowPosition);
+			//exceptionsLogger.AddEntry("camera " + camTr.transform.position);
+			//Vector3 aimingVec = bowPosition - camTr.transform.position;
+			Vector3 aimingVec = bowPos - headPos;
+
+			//exceptionsLogger.AddEntry("aimingVec " + aimingVec);
 			arrowObj.transform.position = camTr.position;
-        	arrowObj.transform.rotation = Quaternion.Euler(aimingVec.x, aimingVec.y, aimingVec.z);
+        	//arrowObj.transform.rotation = Quaternion.Euler(aimingVec.x, aimingVec.y, aimingVec.z);
 
 			Rigidbody rb = arrowObj.GetComponent <Rigidbody>();
-
-        	//rb.velocity = camTr.transform.forward * speed;
-        	rb.velocity = aimingVec * speed;
+        	rb.velocity = camTr.transform.forward * speed;
+        	//rb.velocity = aimingVec * speed;
         	
         }
         catch
