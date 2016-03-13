@@ -12,6 +12,7 @@ public class HeadSkeletonMover : MonoBehaviour
 	[SerializeField]GameObject jointPrefab;
 	[SerializeField]GameObject jointHeadPrefab;
 	[SerializeField]GameObject connectionPrefab;
+	[SerializeField]GameObject leftHandPrefab;
 	[SerializeField]float neckHeadDistance = 0.15f;
 	[SerializeField]Transform camTr;
 

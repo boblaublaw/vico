@@ -41,7 +41,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 6
-  m_GIWorkflowMode: 1
+  m_GIWorkflowMode: 0
   m_LightmapsMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -85,7 +85,7 @@ NavMeshSettings:
     minRegionArea: 2
     cellSize: 0.16666666
     manualCellSize: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: e58d2721a19e346f29dfac16dc33e8a9, type: 2}
 --- !u!1 &6392868
 GameObject:
   m_ObjectHideFlags: 0
@@ -4225,7 +4225,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1044254345}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.45, y: -3.81, z: -1.01}
+  m_LocalPosition: {x: -2.77, y: -3.81, z: -1.01}
   m_LocalScale: {x: 1.6778471, y: 2.5172634, z: 0.14008649}
   m_Children:
   - {fileID: 1919145988}
@@ -4564,7 +4564,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1078351372}
   m_LocalRotation: {x: -0.51601315, y: 0.4834568, z: 0.4834568, w: 0.51601315}
-  m_LocalPosition: {x: 6.441066, y: -6.900919, z: 6.318072}
+  m_LocalPosition: {x: 7.18, y: -6.900919, z: 5.76}
   m_LocalScale: {x: 0.12354831, y: 0.12354832, z: 0.12354832}
   m_Children: []
   m_Father: {fileID: 309692627}
@@ -4620,7 +4620,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1089856094
 Transform:
@@ -7548,7 +7548,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 549802862}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.1, y: 23.5, z: -24.8}
+  m_LocalPosition: {x: -16.1, y: 21.8, z: -24.8}
   m_LocalScale: {x: 5.047257, y: 5.047259, z: 5.047259}
   m_Children:
   - {fileID: 309692627}
@@ -7609,7 +7609,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 43c244d9b4979dd498f4acf72b6e3efc, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -4.19
+      value: -4.2
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 43c244d9b4979dd498f4acf72b6e3efc, type: 2}
       propertyPath: m_LocalPosition.z
@@ -7645,11 +7645,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 43c244d9b4979dd498f4acf72b6e3efc, type: 2}
       propertyPath: m_LocalScale.z
-      value: 1.4655222
+      value: 1.5785825
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 43c244d9b4979dd498f4acf72b6e3efc, type: 2}
       propertyPath: m_Name
       value: Under Tower
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 43c244d9b4979dd498f4acf72b6e3efc, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 43c244d9b4979dd498f4acf72b6e3efc, type: 2}
@@ -7936,6 +7940,7 @@ MonoBehaviour:
   jointPrefab: {fileID: 100000, guid: bfd63c6e70a38a14d848d5fab18d96a6, type: 2}
   jointHeadPrefab: {fileID: 133548, guid: 3a6a9038d62c1db479bd46fe0d27fc92, type: 2}
   connectionPrefab: {fileID: 100000, guid: e74687d927956a64d81ace6b6ff9fdba, type: 2}
+  leftHandPrefab: {fileID: 196698, guid: 3ed58fab4b7df48dcabee7a32edd8ee1, type: 2}
   neckHeadDistance: 0.15
   camTr: {fileID: 2089729291}
 --- !u!114 &2044154438
