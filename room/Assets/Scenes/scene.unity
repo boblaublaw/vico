@@ -1091,7 +1091,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400110, guid: 65d5f2bce8a424c8da1f58e7329de3a7, type: 3}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 334319354}
-  m_LocalRotation: {x: -0.34838206, y: 0.6153292, z: 0.6153291, w: 0.34838217}
+  m_LocalRotation: {x: -0.34838203, y: 0.61532915, z: 0.615329, w: 0.34838215}
   m_LocalPosition: {x: 5.1941094, y: -6.0941515, z: -3.1534114}
   m_LocalScale: {x: 0.14997609, y: 0.14997612, z: 0.14997607}
   m_Children: []
@@ -2046,7 +2046,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 559278408}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 224034efcefde5a46936ae47d6990587, type: 3}
   m_Name: 
@@ -3246,7 +3246,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400120, guid: 65d5f2bce8a424c8da1f58e7329de3a7, type: 3}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 828717072}
-  m_LocalRotation: {x: -0.34838206, y: 0.6153292, z: 0.6153291, w: 0.34838217}
+  m_LocalRotation: {x: -0.34838203, y: 0.61532915, z: 0.615329, w: 0.34838215}
   m_LocalPosition: {x: 10.706643, y: -5.997222, z: 4.555426}
   m_LocalScale: {x: 0.14997609, y: 0.14997612, z: 0.14997607}
   m_Children: []
@@ -4466,6 +4466,10 @@ Prefab:
     - target: {fileID: 22478134, guid: ff2f03de5c3a3444eaad199987a5a9b2, type: 2}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 184852, guid: ff2f03de5c3a3444eaad199987a5a9b2, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ff2f03de5c3a3444eaad199987a5a9b2, type: 2}
@@ -8157,7 +8161,7 @@ MonoBehaviour:
   jointPrefab: {fileID: 100000, guid: bfd63c6e70a38a14d848d5fab18d96a6, type: 2}
   jointHeadPrefab: {fileID: 133548, guid: 3a6a9038d62c1db479bd46fe0d27fc92, type: 2}
   connectionPrefab: {fileID: 100000, guid: e74687d927956a64d81ace6b6ff9fdba, type: 2}
-  leftHandPrefab: {fileID: 161416, guid: f3646e235f63f41a09da16f596ba26cb, type: 2}
+  leftHandPrefab: {fileID: 119706, guid: f3646e235f63f41a09da16f596ba26cb, type: 2}
   neckHeadDistance: 0.15
   camTr: {fileID: 914172820}
 --- !u!114 &2044154438

@@ -148,6 +148,7 @@ public class HeadSkeletonMover : MonoBehaviour
 		{
 			UpdateJoints();
 			HeadUpdate();
+			BowUpdate();
 			UpdateJointConnections();
 		}
 			else //hide user joints if we have no active user
@@ -166,8 +167,6 @@ public class HeadSkeletonMover : MonoBehaviour
 
 	void UpdateJointConnections()
 	{
-		/*
-		exceptionsLogger.AddEntry("test alert");
 		for (int i = 0; i < NUM_CONNECTIONS; i++) // connections
 		{
 			if (joints[jointConnections[i,0]].activeSelf &&
@@ -184,7 +183,8 @@ public class HeadSkeletonMover : MonoBehaviour
 				}
 				else
 				{
-					connections[i].SetActive(false); //joints are too close, no need to render
+					//joints are too close, no need to render
+					connections[i].SetActive(false); 
 				}
 			}
 			else
@@ -192,17 +192,30 @@ public class HeadSkeletonMover : MonoBehaviour
 				if (connections[i].activeSelf) connections[i].SetActive(false);
 			}
 		}
-		*/
 	}
 
 	void HeadUpdate()
 	{
 		nuitrack.Joint neckJoint = NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.Neck);
+		/*
 		Vector3 headPos = 
 			TPoseCalibration.SensorOrientation * new Vector3(neckJoint.Real.X * 0.001f, neckJoint.Real.Y * 0.001f, neckJoint.Real.Z * 0.001f) + 
 			camTr.rotation * new Vector3(0f, neckHeadDistance, 0f);
+		*/
 		transform.position = joints[nuitrack.JointType.Head].GetComponent<Rigidbody>().position;
 		joints[nuitrack.JointType.Head].GetComponent<Rigidbody>().MoveRotation(camTr.rotation);
+	}
+
+	void BowUpdate()
+	{
+		nuitrack.Joint bowJoint = NuitrackManager.CurrentSkeleton.GetJoint(nuitrack.JointType.LeftWrist);
+		/*Vector3 bowPos = 
+			TPoseCalibration.SensorOrientation * new Vector3(neckJoint.Real.X * 0.001f, neckJoint.Real.Y * 0.001f, neckJoint.Real.Z * 0.001f) + 
+			camTr.rotation * new Vector3(0f, neckHeadDistance, 0f);
+		
+		transform.position = joints[nuitrack.JointType.LeftWrist].GetComponent<Rigidbody>().position;
+		*/
+		joints[nuitrack.JointType.LeftWrist].GetComponent<Rigidbody>().MoveRotation(camTr.rotation);
 	}
 
 	void UpdateJoints()
@@ -254,7 +267,10 @@ public class HeadSkeletonMover : MonoBehaviour
 			{
 				if (j != nuitrack.JointType.Head) 
 				{
-					if (joints[j].activeSelf) joints[j].SetActive(false);
+					if (joints[j].activeSelf) 
+					{
+						joints[j].SetActive(false);
+					}
 				}
 			}
 
